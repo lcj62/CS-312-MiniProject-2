@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>welcome to random joke generator</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <script>
+        async function fetchJoke() {
+            try {
+                const response = await fetch('/joke'); 
+                if (!response.ok) {
+                    throw new Error('No network');
+                }
+                const jokeData = await response.json();
+                
+        // format of the joke
+                let joke;
+                if (jokeData.type === 'single') {
+                    joke = jokeData.joke;
+                } else if (jokeData.type === 'twopart') {
+                    joke = `${jokeData.setup} - ${jokeData.delivery}`;
+                } else {
+                    joke = "No JOKES FOR YOUUU";
+                }
+
+                document.getElementById('jokeDisplay').innerText = joke;
+            } catch (error) {
+                console.error("Error fetching joke:", error);
+                document.getElementById('jokeDisplay').innerText = "Failed to fetch a joke.";
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>click for a random joke</h1>
+        <button onclick="fetchJoke()">random joke</button>
+        <p id="jokeDisplay"></p>
+    </div>
+    
+</body>
+
+</html>
